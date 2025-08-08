@@ -1,21 +1,14 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { 
   Search, 
   Mountain, 
   Camera, 
   MapPin, 
-  Compass, 
-  TreePine, 
   Waves, 
-  Building, 
   Coffee, 
   Utensils,
   Star,
-  ArrowRight,
-  Filter,
   Plane,
   Car,
   Home,
@@ -24,38 +17,28 @@ import {
   Briefcase,
   GraduationCap,
   ShoppingBag,
-  Gamepad2,
   Music,
-  Palette,
-  Dumbbell,
-  Stethoscope,
-  Wrench,
-  Truck,
-  Calculator,
-  Scale,
-  Scissors,
   Shirt,
-  Zap,
-  Shield,
-  Camera as CameraIcon,
   ExternalLink,
   Phone,
   Globe,
-  Mail,
   Smartphone,
   Gift,
   Search as SearchIcon,
-  Percent,
-  BookOpen,
-  Instagram
+  ChevronLeft,
+  ChevronRight,
+  ChevronDown
 } from "lucide-react";
 import { useState } from "react";
 import Masonry from "react-masonry-css";
 
 const Categories = () => {
-  // Estado para filtro de categoría
-  const [activeCategory, setActiveCategory] = useState('Todas');
+  // Estados para filtro de categoría y carrusel
+  const [activeCategory, setActiveCategory] = useState('Nuestras Marcas');
   const [searchTerm, setSearchTerm] = useState("");
+  const [currentCategoryIndex, setCurrentCategoryIndex] = useState(0);
+  const [expandedCategory, setExpandedCategory] = useState(null);
+  const [activeSubcategory, setActiveSubcategory] = useState(null);
 
   // Negocios reales proporcionados por el usuario
   const businesses = [
@@ -63,7 +46,8 @@ const Categories = () => {
       name: "Casa Hotel Venecia",
       subdomain: "casahotelvenecia",
       url: "https://casahotelvenecia.tuguiadeturismo.com/",
-      category: "Hoteles y Alojamiento",
+      category: "Alojamiento",
+      subcategory: "Hoteles",
       phone: "",
       location: "Medellín, Colombia",
       description: "Hotel boutique con ambiente familiar y servicios premium en el corazón de Medellín.",
@@ -86,23 +70,11 @@ const Categories = () => {
       featured: true
     },
     {
-      name: "CV Alfonso López",
-      subdomain: "cvalfonsolopez",
-      url: "https://cvalfonsolopez.tuguiadeturismo.com/",
-      category: "Centros Vacacionales",
-      phone: "",
-      location: "Colombia",
-      description: "Centro vacacional con piscina, recreación y espacios para toda la familia.",
-      image: "photo-1507525428034-b723cf961d3e",
-      icon: Briefcase,
-      rating: 4.7,
-      featured: false
-    },
-    {
       name: "La Casona",
       subdomain: "lacasona",
       url: "https://lacasona.tuguiadeturismo.com/",
-      category: "Restaurantes",
+      category: "Gastronomía",
+      subcategory: "Restaurantes",
       phone: "",
       location: "Medellín, Colombia",
       description: "Restaurante de comida típica y ambiente tradicional antioqueño.",
@@ -115,7 +87,8 @@ const Categories = () => {
       name: "Rentas AMG",
       subdomain: "rentasamg",
       url: "https://rentasamg.tuguiadeturismo.com/",
-      category: "Transporte y Alquiler",
+      category: "Transporte",
+      subcategory: "Renta de vehículos",
       phone: "3014480448",
       location: "Medellín, Colombia",
       description: "Alquiler de vehículos premium y servicios de transporte ejecutivo.",
@@ -129,6 +102,7 @@ const Categories = () => {
       subdomain: "imperiumessence",
       url: "https://imperiumessence.tuguiadeturismo.com/",
       category: "Belleza y Cuidado Personal",
+      subcategory: "Salones de belleza",
       phone: "3150816169",
       location: "Colombia",
       description: "Productos de belleza y cuidado personal premium.",
@@ -180,7 +154,8 @@ const Categories = () => {
       name: "Los Pits Barber",
       subdomain: "lospitsbarber",
       url: "https://lospitsbarber.tuguiadeturismo.com/",
-      category: "Barbería y Estética",
+      category: "Belleza y Cuidado Personal",
+      subcategory: "Barberías",
       phone: "",
       location: "Colombia",
       description: "Barbería moderna y cuidado masculino profesional.",
@@ -193,7 +168,8 @@ const Categories = () => {
       name: "Car Dealer Imports",
       subdomain: "cardealerimports",
       url: "https://cardealerimports.tuguiadeturismo.com/",
-      category: "Importación de Autos",
+      category: "Transporte",
+      subcategory: "Importación de vehículos",
       phone: "",
       location: "Colombia",
       description: "Importación y venta de autos de lujo y alta gama.",
@@ -219,7 +195,8 @@ const Categories = () => {
       name: "Buenos Aires Coffee",
       subdomain: "buenosairescoffe",
       url: "https://buenosairescoffe.tuguiadeturismo.com/",
-      category: "Café y Gastronomía",
+      category: "Café y Aromas",
+      subcategory: "Cafeterías",
       phone: "",
       location: "Colombia",
       description: "Café de especialidad y experiencias baristas únicas.",
@@ -245,7 +222,8 @@ const Categories = () => {
       name: "Palm Beach",
       subdomain: "palmbeach",
       url: "https://palmbeach.tuguiadeturismo.com/",
-      category: "Turismo y Playa",
+      category: "Viajes y Turismo",
+      subcategory: "Turismo local",
       phone: "",
       location: "Colombia",
       description: "Destino turístico de playa y descanso con ambiente tropical.",
@@ -255,58 +233,179 @@ const Categories = () => {
       featured: false
     },
     {
-      name: "Venturs",
-      subdomain: "venturs",
-      url: "https://venturs.tuguiadeturismo.com/",
-      category: "Aventura y Deportes",
+      name: "CV Alfonso López",
+      subdomain: "cvalfonsolopez",
+      url: "https://cvalfonsolopez.tuguiadeturismo.com/",
+      category: "Viajes y Turismo",
+      subcategory: "Turismo especializado",
       phone: "",
       location: "Colombia",
-      description: "Deportes extremos, aventura y experiencias únicas en Colombia.",
-      image: "photo-1469474968028-56623f02e42e",
-      icon: Mountain,
-      rating: 4.9,
+      description: "Centro vacacional con piscina, recreación y espacios para toda la familia.",
+      image: "photo-1507525428034-b723cf961d3e",
+      icon: Briefcase,
+      rating: 4.7,
+      featured: false
+    },
+    // Nuevos negocios para las categorías agregadas
+    {
+      name: "La Rockola Bar",
+      subdomain: "larockolabar",
+      url: "https://larockolabar.tuguiadeturismo.com/",
+      category: "Bares y Discotecas",
+      subcategory: "Bares",
+      phone: "",
+      location: "Medellín, Colombia",
+      description: "Bar con música en vivo y ambiente rockero en el corazón de Medellín.",
+      image: "photo-1514933651103-005eec06c04b",
+      icon: Music,
+      rating: 4.6,
+      featured: false
+    },
+    {
+      name: "Emprendimiento Digital",
+      subdomain: "emprendimientodigital",
+      url: "https://emprendimientodigital.tuguiadeturismo.com/",
+      category: "Emprendedores",
+      subcategory: "Tecnología",
+      phone: "",
+      location: "Colombia",
+      description: "Plataforma de apoyo para emprendedores digitales y startups.",
+      image: "photo-1552664730-d307ca884978",
+      icon: Briefcase,
+      rating: 4.8,
       featured: true
+    },
+    {
+      name: "Café de la Comuna 13",
+      subdomain: "cafecomuna13",
+      url: "https://cafecomuna13.tuguiadeturismo.com/",
+      category: "Por Comunas",
+      subcategory: "Comuna 13",
+      phone: "",
+      location: "Comuna 13, Medellín",
+      description: "Café comunitario que promueve el desarrollo local de la Comuna 13.",
+      image: "photo-1447933601403-0c6688de566e",
+      icon: Coffee,
+      rating: 4.7,
+      featured: false
+    },
+    {
+      name: "Tienda Gourmet",
+      subdomain: "tiendagourmet",
+      url: "https://tiendagourmet.tuguiadeturismo.com/",
+      category: "Cafeterías y Tiendas",
+      subcategory: "Tiendas especializadas",
+      phone: "",
+      location: "Medellín, Colombia",
+      description: "Tienda especializada en productos gourmet y delicatessen.",
+      image: "photo-1578662996442-48f60103fc96",
+      icon: ShoppingBag,
+      rating: 4.5,
+      featured: false
     }
   ];
 
-  // Derivar categorías únicas de los negocios
-  const categoriesList = Array.from(new Set(businesses.map(b => b.category)));
-  const categoryIcons = {
-    "Hoteles y Alojamiento": Home,
-    "Fotografía y Arte": Camera,
-    "Centros Vacacionales": Briefcase,
-    "Restaurantes": Utensils,
-    "Transporte y Alquiler": Car,
-    "Belleza y Cuidado Personal": Heart,
-    "Tecnología": Smartphone,
-    "Deportes y Academias": Users,
-    "Moda y Ropa": Shirt,
-    "Barbería y Estética": Heart,
-    "Importación de Autos": Car,
-    "Regalos y Fiestas": Gift,
-    "Café y Gastronomía": Coffee,
-    "Educación y Formación": GraduationCap,
-    "Turismo y Playa": Waves,
-    "Aventura y Deportes": Mountain
-  };
-  const categoryColors = {
-    "Hoteles y Alojamiento": "from-blue-400 to-blue-600",
-    "Fotografía y Arte": "from-pink-400 to-pink-600",
-    "Centros Vacacionales": "from-green-400 to-green-600",
-    "Restaurantes": "from-yellow-400 to-yellow-600",
-    "Transporte y Alquiler": "from-gray-400 to-gray-600",
-    "Belleza y Cuidado Personal": "from-rose-400 to-rose-600",
-    "Tecnología": "from-indigo-400 to-indigo-600",
-    "Deportes y Academias": "from-emerald-400 to-emerald-600",
-    "Moda y Ropa": "from-fuchsia-400 to-fuchsia-600",
-    "Barbería y Estética": "from-orange-400 to-orange-600",
-    "Importación de Autos": "from-gray-500 to-gray-800",
-    "Regalos y Fiestas": "from-red-400 to-red-600",
-    "Café y Gastronomía": "from-amber-400 to-amber-600",
-    "Educación y Formación": "from-cyan-400 to-cyan-600",
-    "Turismo y Playa": "from-teal-400 to-teal-600",
-    "Aventura y Deportes": "from-lime-400 to-lime-600"
-  };
+  // Definir categorías con sus subcategorías (solo las que las necesitan)
+  const categoriesData = [
+    {
+      name: "Alojamiento",
+      icon: Home,
+      color: "from-blue-400 to-blue-600",
+      subcategories: ["Hoteles", "Apartamentos", "Otros alojamientos"] // SÍ tiene subcategorías
+    },
+    {
+      name: "Viajes y Turismo", // 2do lugar
+      icon: Plane,
+      color: "from-teal-400 to-teal-600",
+      subcategories: ["Viajes alrededor del mundo", "Asesores en turismo", "Turismo local", "Turismo especializado", "Estudios en el exterior"] // SÍ tiene subcategorías
+    },
+    {
+      name: "Emprendedores", // 3er lugar
+      icon: Briefcase,
+      color: "from-purple-400 to-purple-600",
+      subcategories: [] // NO tiene subcategorías
+    },
+    {
+      name: "Fotografía y Arte",
+      icon: Camera,
+      color: "from-pink-400 to-pink-600",
+      subcategories: [] // NO tiene subcategorías (OK)
+    },
+    {
+      name: "Gastronomía",
+      icon: Utensils,
+      color: "from-yellow-400 to-yellow-600",
+      subcategories: ["Restaurantes", "Comidas rápidas", "Alimentos"] // SÍ tiene subcategorías
+    },
+    {
+      name: "Transporte",
+      icon: Car,
+      color: "from-gray-400 to-gray-600",
+      subcategories: ["Renta de vehículos", "Venta de vehículos", "Importación de vehículos", "Transporte ejecutivo", "Otro transporte"] // SÍ tiene subcategorías
+    },
+    {
+      name: "Belleza y Cuidado Personal",
+      icon: Heart,
+      color: "from-rose-400 to-rose-600",
+      subcategories: ["Salones de belleza", "Barberías", "Salud y bienestar", "Spa", "Centros de estética"] // SÍ tiene subcategorías
+    },
+    {
+      name: "Tecnología",
+      icon: Smartphone,
+      color: "from-indigo-400 to-indigo-600",
+      subcategories: [] // NO tiene subcategorías (OK)
+    },
+    {
+      name: "Deportes y Academias",
+      icon: Users,
+      color: "from-emerald-400 to-emerald-600",
+      subcategories: [] // NO tiene subcategorías (OK)
+    },
+    {
+      name: "Moda y Ropa",
+      icon: Shirt,
+      color: "from-fuchsia-400 to-fuchsia-600",
+      subcategories: [] // NO tiene subcategorías (OK)
+    },
+    {
+      name: "Regalos y Fiestas",
+      icon: Gift,
+      color: "from-red-400 to-red-600",
+      subcategories: [] // NO tiene subcategorías (OK)
+    },
+    {
+      name: "Café y Aromas",
+      icon: Coffee,
+      color: "from-amber-400 to-amber-600",
+      subcategories: [] // NO tiene subcategorías
+    },
+    {
+      name: "Educación y Formación",
+      icon: GraduationCap,
+      color: "from-cyan-400 to-cyan-600",
+      subcategories: [] // NO tiene subcategorías (OK)
+    },
+    {
+      name: "Bares y Discotecas",
+      icon: Music,
+      color: "from-violet-400 to-violet-600",
+      subcategories: [] // NO tiene subcategorías
+    },
+    {
+      name: "Por Comunas",
+      icon: MapPin,
+      color: "from-green-400 to-green-600",
+      subcategories: [] // NO tiene subcategorías
+    },
+    {
+      name: "Cafeterías y Tiendas",
+      icon: ShoppingBag,
+      color: "from-orange-400 to-orange-600",
+      subcategories: [] // NO tiene subcategorías
+    }
+  ];
+
+
 
   // Función para normalizar texto (sin tildes, minúsculas)
   function normalize(str) {
@@ -346,29 +445,31 @@ const Categories = () => {
     return result;
   }
 
-  const filteredBusinesses = activeCategory === 'Todas'
-    ? businesses.filter(business => {
-        const term = normalize(searchTerm);
-        return (
-          normalize(business.name).includes(term) ||
-          normalize(business.category).includes(term) ||
-          normalize(business.description).includes(term) ||
-          normalize(business.subdomain).includes(term) ||
-          normalize(business.location).includes(term)
-        );
-      })
-    : businesses.filter(business => {
-        const term = normalize(searchTerm);
-        return (
-          business.category === activeCategory && (
-            normalize(business.name).includes(term) ||
-            normalize(business.category).includes(term) ||
-            normalize(business.description).includes(term) ||
-            normalize(business.subdomain).includes(term) ||
-            normalize(business.location).includes(term)
-          )
-        );
-      });
+  const filteredBusinesses = businesses.filter(business => {
+    const term = normalize(searchTerm);
+    const matchesSearch = (
+      normalize(business.name).includes(term) ||
+      normalize(business.category).includes(term) ||
+      normalize(business.description).includes(term) ||
+      normalize(business.subdomain).includes(term) ||
+      normalize(business.location).includes(term)
+    );
+
+    // Si está en "Nuestras Marcas", mostrar todos que coincidan con búsqueda
+    if (activeCategory === 'Nuestras Marcas') {
+      return matchesSearch;
+    }
+
+    // Si hay subcategoría activa, filtrar por ella
+    if (activeSubcategory) {
+      return matchesSearch && 
+             business.category === activeCategory && 
+             business.subcategory === activeSubcategory;
+    }
+
+    // Si no hay subcategoría, filtrar solo por categoría principal
+    return matchesSearch && business.category === activeCategory;
+  });
   const groupedBusinesses = filteredBusinesses.reduce((acc, business) => {
     if (!acc[business.category]) {
       acc[business.category] = [];
@@ -379,41 +480,30 @@ const Categories = () => {
   const sortedCategories = Object.keys(groupedBusinesses).sort();
   const allBusinessesSorted = sortedCategories.flatMap(category => groupedBusinesses[category]);
 
-  // Chips de categorías premium
-  const CategoryChip = ({cat, Icon, color, selected, onClick}) => (
-    <button
-      onClick={onClick}
-      className={`flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r ${color} text-white font-semibold shadow-lg transition-all duration-300 hover:scale-105 focus:outline-none border-2 border-transparent ${selected ? 'ring-2 ring-yellow-400 border-yellow-400 scale-110' : ''}`}
-      style={{minWidth: 0}}
-    >
-      <Icon className="h-5 w-5" />
-      <span className="truncate">{cat}</span>
-    </button>
-  );
+
 
   // Asigna imágenes de Unsplash relevantes por categoría
   const unsplashImages = {
-    "Hoteles y Alojamiento": "photo-1506744038136-46273834b3fb",
+    "Alojamiento": "photo-1506744038136-46273834b3fb",
+    "Viajes y Turismo": "photo-1507525428034-b723cf961d3e",
+    "Emprendedores": "photo-1552664730-d307ca884978",
     "Fotografía y Arte": "photo-1519125323398-675f0ddb6308",
-    "Centros Vacacionales": "photo-1507525428034-b723cf961d3e",
-    "Restaurantes": "photo-1414235077428-338989a2e8c0",
-    "Transporte y Alquiler": "photo-1449824913935-59a10b8d2000",
+    "Gastronomía": "photo-1414235077428-338989a2e8c0",
+    "Transporte": "photo-1449824913935-59a10b8d2000",
     "Belleza y Cuidado Personal": "photo-1517841905240-472988babdf9",
     "Tecnología": "photo-1519389950473-47ba0277781c",
     "Deportes y Academias": "photo-1571019613454-1cb2f99b2d8b",
     "Moda y Ropa": "photo-1512436991641-6745cdb1723f",
-    "Barbería y Estética": "photo-1515378791036-0648a3ef77b2",
-    "Importación de Autos": "photo-1503736334956-4c8f8e92946d",
     "Regalos y Fiestas": "photo-1513475382585-d06e58bcb0e0",
-    "Café y Gastronomía": "photo-1447933601403-0c6688de566e",
+    "Café y Aromas": "photo-1447933601403-0c6688de566e",
     "Educación y Formación": "photo-1464983953574-0892a716854b",
-    "Turismo y Playa": "photo-1507525428034-b723cf961d3e",
-    "Aventura y Deportes": "photo-1469474968028-56623f02e42e"
+    "Bares y Discotecas": "photo-1514933651103-005eec06c04b",
+    "Por Comunas": "photo-1469474968028-56623f02e42e",
+    "Cafeterías y Tiendas": "photo-1578662996442-48f60103fc96"
   };
 
   // Estilos premium para tarjetas y badges
   const premiumCardClass = `luxury-card border-0 overflow-hidden group hover:scale-105 transition-all duration-500 h-full bg-white/20 backdrop-blur-xl shadow-2xl rounded-3xl border border-yellow-400/30 hover:shadow-[0_8px_32px_0_rgba(255,215,0,0.25)]`;
-  const premiumBadgeClass = `bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 text-primary font-semibold text-xs shadow-md animate-pulse`;
   const premiumButtonClass = `bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 text-white font-bold rounded-xl shadow-lg hover:scale-105 transition-transform duration-300`;
 
   // Masonry breakpoints para responsividad mejorada
@@ -424,30 +514,146 @@ const Categories = () => {
     600: 1
   };
 
-  // Chips de categorías premium con scroll horizontal en móvil
-  const CategoryChipBar = ({activeCategory, setActiveCategory, categoriesList, categoryIcons, categoryColors}) => (
-    <div className="w-full overflow-x-auto pb-2 mb-6">
-      <div className="flex gap-3 min-w-max md:justify-center">
-        <CategoryChip
-          cat="Todas"
-          Icon={Globe}
-          color="from-yellow-400 to-yellow-600"
-          selected={activeCategory === 'Todas'}
-          onClick={() => setActiveCategory('Todas')}
-        />
-        {categoriesList.map(cat => (
-          <CategoryChip
-            key={cat}
-            cat={cat}
-            Icon={categoryIcons[cat] || Briefcase}
-            color={categoryColors[cat] || 'from-gray-400 to-gray-600'}
-            selected={activeCategory === cat}
-            onClick={() => setActiveCategory(cat)}
-          />
-        ))}
+  // Funciones del carrusel
+  const nextCategory = () => {
+    setCurrentCategoryIndex((prevIndex) => 
+      prevIndex === categoriesData.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+
+  const prevCategory = () => {
+    setCurrentCategoryIndex((prevIndex) => 
+      prevIndex === 0 ? categoriesData.length - 1 : prevIndex - 1
+    );
+  };
+
+  const handleCategoryClick = (category) => {
+    setActiveCategory(category.name);
+    setActiveSubcategory(null);
+    if (expandedCategory === category.name) {
+      setExpandedCategory(null);
+    } else {
+      setExpandedCategory(category.name);
+    }
+  };
+
+  const handleSubcategoryClick = (subcategory) => {
+    setActiveSubcategory(subcategory);
+    setExpandedCategory(null);
+  };
+
+  // Carrusel giratorio con subcategorías desplegables
+  const CategoryCarousel = () => {
+    const visibleCategories = 5; // Mostrar 5 categorías a la vez
+    const startIndex = currentCategoryIndex;
+    const displayCategories = [];
+    
+    for (let i = 0; i < visibleCategories; i++) {
+      const index = (startIndex + i) % categoriesData.length;
+      displayCategories.push(categoriesData[index]);
+    }
+
+    return (
+      <div className="w-full mb-8">
+        {/* Botón Nuestras Marcas */}
+        <div className="flex justify-center mb-4">
+          <button
+            onClick={() => {
+              setActiveCategory('Nuestras Marcas');
+              setExpandedCategory(null);
+              setActiveSubcategory(null);
+            }}
+            className={`flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-yellow-400 to-yellow-600 text-white font-semibold shadow-lg transition-all duration-300 hover:scale-105 ${
+              activeCategory === 'Nuestras Marcas' ? 'ring-2 ring-yellow-400 scale-110' : ''
+            }`}
+          >
+            <Globe className="h-5 w-5" />
+            <span>Nuestras Marcas</span>
+          </button>
+        </div>
+
+        {/* Carrusel de categorías */}
+        <div className="relative">
+          <div className="flex items-center justify-center gap-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={prevCategory}
+              className="p-2 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-all"
+            >
+              <ChevronLeft className="h-5 w-5 text-white" />
+            </Button>
+
+            <div className="flex gap-2 overflow-hidden">
+              {displayCategories.map((category, index) => {
+                const isCenter = index === Math.floor(visibleCategories / 2);
+                return (
+                  <div key={category.name} className="flex flex-col items-center">
+                    <button
+                      onClick={() => handleCategoryClick(category)}
+                      className={`flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r ${category.color} text-white font-semibold shadow-lg transition-all duration-300 hover:scale-105 ${
+                        activeCategory === category.name ? 'ring-2 ring-yellow-400 scale-110' : ''
+                      } ${
+                        isCenter ? 'scale-110 z-10' : 'scale-90 opacity-70'
+                      }`}
+                      style={{ minWidth: isCenter ? '140px' : '120px' }}
+                    >
+                      <category.icon className="h-4 w-4" />
+                      <span className="text-sm truncate">{category.name}</span>
+                      {category.subcategories.length > 0 && (
+                        <ChevronDown className={`h-3 w-3 transition-transform ${
+                          expandedCategory === category.name ? 'rotate-180' : ''
+                        }`} />
+                      )}
+                    </button>
+                    
+                    {/* Subcategorías desplegables */}
+                    {expandedCategory === category.name && (
+                      <div className="absolute top-full mt-2 bg-white/90 backdrop-blur-xl rounded-xl shadow-2xl p-4 z-20 min-w-[200px] animate-fade-in-up">
+                        <div className="grid gap-2">
+                          {category.subcategories.map((subcategory) => (
+                            <button
+                              key={subcategory}
+                              onClick={() => handleSubcategoryClick(subcategory)}
+                              className={`text-left px-3 py-2 rounded-lg text-sm transition-all hover:bg-yellow-100/60 ${
+                                activeSubcategory === subcategory 
+                                  ? 'bg-yellow-200/80 font-semibold text-yellow-800' 
+                                  : 'text-gray-700 hover:text-gray-900'
+                              }`}
+                            >
+                              {subcategory}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={nextCategory}
+              className="p-2 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-all"
+            >
+              <ChevronRight className="h-5 w-5 text-white" />
+            </Button>
+          </div>
+        </div>
+
+        {/* Indicador de subcategoría activa */}
+        {activeSubcategory && (
+          <div className="flex justify-center mt-4">
+            <div className="px-4 py-2 bg-yellow-200/80 rounded-full text-sm font-semibold text-yellow-800">
+              Filtrando por: {activeSubcategory}
+            </div>
+          </div>
+        )}
       </div>
-    </div>
-  );
+    );
+  };
 
   // Tarjeta premium responsiva
   const BusinessCard = ({ business }) => (
@@ -531,14 +737,8 @@ const Categories = () => {
       </div>
 
       <div className="container mx-auto px-2 md:px-6 relative z-10">
-        {/* Filtro de categorías premium responsivo */}
-        <CategoryChipBar
-          activeCategory={activeCategory}
-          setActiveCategory={setActiveCategory}
-          categoriesList={categoriesList}
-          categoryIcons={categoryIcons}
-          categoryColors={categoryColors}
-        />
+        {/* Carrusel de categorías con subcategorías desplegables */}
+        <CategoryCarousel />
         {/* Header */}
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-3 bg-gradient-accent px-6 py-2 rounded-full text-primary font-semibold mb-6">
