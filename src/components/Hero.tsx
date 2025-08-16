@@ -53,6 +53,157 @@ const Hero = () => {
             </div>
           </div>
 
+          {/* Slider de Logos */}
+          <div className="w-full max-w-6xl mx-auto py-8 md:py-12">
+            <div className="text-center mb-6 md:mb-8">
+              <h3 className="text-lg md:text-xl font-semibold text-white/90 mb-2 font-serif">
+                NUESTRAS MARCAS
+              </h3>
+              <p className="text-sm md:text-base text-white/70 max-w-2xl mx-auto">
+                Empresas destacadas que confían en Mi Medallo Digital
+              </p>
+            </div>
+            
+            {/* Contenedor del slider */}
+            <div className="relative overflow-hidden bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20">
+              <div className="flex animate-scroll py-6">
+                {/* Primera fila de logos */}
+                <div className="flex items-center space-x-16 md:space-x-20 px-8">
+                  <div className="flex-shrink-0 w-32 md:w-40 flex items-center justify-center">
+                    <img
+                      src="/logos/palmbeach.png"
+                      alt="Palm Beach"
+                      className="h-12 w-auto md:h-16 opacity-90 hover:opacity-100 transition-all duration-300 hover:scale-110 drop-shadow-lg max-w-full"
+                    />
+                  </div>
+                  <div className="flex-shrink-0 w-32 md:w-40 flex items-center justify-center">
+                    <img
+                      src="/logos/viviendaturisticaelcastillo.jpg"
+                      alt="Vivienda Turística El Castillo"
+                      className="h-12 w-auto md:h-16 opacity-90 hover:opacity-100 transition-all duration-300 hover:scale-110 drop-shadow-lg max-w-full"
+                    />
+                  </div>
+                  <div className="flex-shrink-0 w-32 md:w-40 flex items-center justify-center">
+                    <img
+                      src="/logos/paraelviaje.jpg"
+                      alt="Para El Viaje"
+                      className="h-12 w-auto md:h-16 opacity-90 hover:opacity-100 transition-all duration-300 hover:scale-110 drop-shadow-lg max-w-full"
+                    />
+                  </div>
+                  <div className="flex-shrink-0 w-32 md:w-40 flex items-center justify-center">
+                    <img
+                      src="/logos/rentasamg.jpg"
+                      alt="Rentas AMG"
+                      className="h-12 w-auto md:h-16 opacity-90 hover:opacity-100 transition-all duration-300 hover:scale-110 drop-shadow-lg max-w-full"
+                    />
+                  </div>
+                  <div className="flex-shrink-0 w-32 md:w-40 flex items-center justify-center">
+                    <img
+                      src="/logos/merizalde.jpg"
+                      alt="Merizalde"
+                      className="h-12 w-auto md:h-16 opacity-90 hover:opacity-100 transition-all duration-300 hover:scale-110 drop-shadow-lg max-w-full"
+                    />
+                  </div>
+                  <div className="flex-shrink-0 w-32 md:w-40 flex items-center justify-center">
+                    <img
+                      src="/logos/showfelix.jpg"
+                      alt="Show Felix"
+                      className="h-12 w-auto md:h-16 opacity-90 hover:opacity-100 transition-all duration-300 hover:scale-110 drop-shadow-lg max-w-full"
+                    />
+                  </div>
+                  <div className="flex-shrink-0 w-32 md:w-40 flex items-center justify-center">
+                    <img
+                      src="/logos/mundosorpresa.jpg"
+                      alt="Mundo Sorpresa"
+                      className="h-12 w-auto md:h-16 opacity-90 hover:opacity-100 transition-all duration-300 hover:scale-110 drop-shadow-lg max-w-full"
+                    />
+                  </div>
+                  <div className="flex-shrink-0 w-32 md:w-40 flex items-center justify-center">
+                    <img
+                      src="/logos/coltotours.jpg"
+                      alt="Colto Tours"
+                      className="h-12 w-auto md:h-16 opacity-90 hover:opacity-100 transition-all duration-300 hover:scale-110 drop-shadow-lg max-w-full"
+                    />
+                  </div>
+                  <div className="flex-shrink-0 w-32 md:w-40 flex items-center justify-center">
+                    <img
+                      src="/logos/chivasmoto.jpg"
+                      alt="Chivas Moto"
+                      className="h-12 w-auto md:h-16 opacity-90 hover:opacity-100 transition-all duration-300 hover:scale-110 drop-shadow-lg max-w-full"
+                    />
+                  </div>
+                </div>
+                
+                {/* Segunda fila de logos (duplicada para efecto infinito) */}
+                <div className="flex items-center space-x-16 md:space-x-20 px-8">
+                  <div className="flex-shrink-0 w-32 md:w-40 flex items-center justify-center">
+                    <img
+                      src="/logos/palmbeach.png"
+                      alt="Palm Beach"
+                      className="h-12 w-auto md:h-16 opacity-90 hover:opacity-100 transition-all duration-300 hover:scale-110 drop-shadow-lg max-w-full"
+                    />
+                  </div>
+                  <div className="flex-shrink-0 w-32 md:w-40 flex items-center justify-center">
+                    <img
+                      src="/logos/viviendaturisticaelcastillo.jpg"
+                      alt="Vivienda Turística El Castillo"
+                      className="h-12 w-auto md:h-16 opacity-90 hover:opacity-100 transition-all duration-300 hover:scale-110 drop-shadow-lg max-w-full"
+                    />
+                  </div>
+                  <div className="flex-shrink-0 w-32 md:w-40 flex items-center justify-center">
+                    <img
+                      src="/logos/paraelviaje.jpg"
+                      alt="Para El Viaje"
+                      className="h-12 w-auto md:h-16 opacity-90 hover:opacity-100 transition-all duration-300 hover:scale-110 drop-shadow-lg max-w-full"
+                    />
+                  </div>
+                  <div className="flex-shrink-0 w-32 md:w-40 flex items-center justify-center">
+                    <img
+                      src="/logos/rentasamg.jpg"
+                      alt="Rentas AMG"
+                      className="h-12 w-auto md:h-16 opacity-90 hover:opacity-100 transition-all duration-300 hover:scale-110 drop-shadow-lg max-w-full"
+                    />
+                  </div>
+                  <div className="flex-shrink-0 w-32 md:w-40 flex items-center justify-center">
+                    <img
+                      src="/logos/merizalde.jpg"
+                      alt="Merizalde"
+                      className="h-12 w-auto md:h-16 opacity-90 hover:opacity-100 transition-all duration-300 hover:scale-110 drop-shadow-lg max-w-full"
+                    />
+                  </div>
+                  <div className="flex-shrink-0 w-32 md:w-40 flex items-center justify-center">
+                    <img
+                      src="/logos/showfelix.jpg"
+                      alt="Show Felix"
+                      className="h-12 w-auto md:h-16 opacity-90 hover:opacity-100 transition-all duration-300 hover:scale-110 drop-shadow-lg max-w-full"
+                    />
+                  </div>
+                  <div className="flex-shrink-0 w-32 md:w-40 flex items-center justify-center">
+                    <img
+                      src="/logos/mundosorpresa.jpg"
+                      alt="Mundo Sorpresa"
+                      className="h-12 w-auto md:h-16 opacity-90 hover:opacity-100 transition-all duration-300 hover:scale-110 drop-shadow-lg max-w-full"
+                    />
+                  </div>
+                  <div className="flex-shrink-0 w-32 md:w-40 flex items-center justify-center">
+                    <img
+                      src="/logos/coltotours.jpg"
+                      alt="Colto Tours"
+                      className="h-12 w-auto md:h-16 opacity-90 hover:opacity-100 transition-all duration-300 hover:scale-110 drop-shadow-lg max-w-full"
+                    />
+                  </div>
+                  <div className="flex-shrink-0 w-32 md:w-40 flex items-center justify-center">
+                    <img
+                      src="/logos/chivasmoto.jpg"
+                      alt="Chivas Moto"
+                      className="h-12 w-auto md:h-16 opacity-90 hover:opacity-100 transition-all duration-300 hover:scale-110 drop-shadow-lg max-w-full"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Main Title */}
           <div className="space-y-2 sm:space-y-4 max-w-2xl md:max-w-4xl">
             <h1 className="text-3xl sm:text-5xl md:text-7xl font-bold text-white hero-text-glow">

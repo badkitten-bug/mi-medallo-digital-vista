@@ -222,3 +222,21 @@ All colors MUST be HSL.
     background-position: 0% 50%;
   }
 }
+
+/* Slider de Logos - Animación de scroll infinito */
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll {
+  animation: scroll 40s linear infinite;
+}
+
+.animate-scroll:hover {
+  animation-play-state: paused;
+}
